@@ -22,6 +22,7 @@ PAGES = {
     "privacy.html": SITE_URL + "privacy.html",
     "terms.html": SITE_URL + "terms.html",
 }
+TEXT_FILES = frozenset((*PAGES, "style.css"))
 LEGAL_SHA256 = {
     "privacy.html": "3a6b1d0086ba6c03fcd36f84796957a4df6d6e23d8bc2117097bf37ab9361f8c",
     "terms.html": "a9125cfda526bce2f3576e0afa37832c3cb8df4edff31f6250359ffe63e6e55e",
@@ -191,8 +192,13 @@ def check_live() -> None:
             errors.append(f"live {path}: content type {actual_type!r}, expected {content_type!r}")
         if final_url != url:
             errors.append(f"live {path}: resolved to {final_url!r}, expected {url!r}")
-        if body != (ROOT / path).read_bytes():
-            errors.append(f"live {path}: deployed bytes differ from local file (deployment may be pending)")
+        local_body = (ROOT / path).read_bytes()
+        if path in TEXT_FILES:
+            matches = body.replace(b"\r\n", b"\n") == local_body.replace(b"\r\n", b"\n")
+        else:
+            matches = body == local_body
+        if not matches:
+            errors.append(f"live {path}: deployed content differs from local file (deployment may be pending)")
         if path in PAGES:
             try:
                 check_html(path, body, check_local_links=False)
@@ -217,7 +223,7 @@ def check_live() -> None:
             print(f"FAIL: {error}", file=sys.stderr)
         fail(f"live verification found {len(errors)} issue(s); after deployment, rerun this command once")
     print("PASS live: HTTPS pages, stylesheet, PNG, and verification file return expected status/content types")
-    print("PASS live: deployed bytes match local files; icon references, legal bodies, and verification are preserved")
+    print("PASS live: text content matches after newline normalization; PNG and verification token match exact bytes; icon references and legal bodies are preserved")
     print("PASS live: HTTP and no-trailing-slash URLs redirect to the canonical HTTPS home URL")
 
 

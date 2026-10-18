@@ -21,11 +21,13 @@ PAGES = {
     "index.html": SITE_URL,
     "privacy.html": SITE_URL + "privacy.html",
     "terms.html": SITE_URL + "terms.html",
+    "review.html": SITE_URL + "review.html",
+    "demo.html": SITE_URL + "demo.html",
 }
-TEXT_FILES = frozenset((*PAGES, "style.css"))
+TEXT_FILES = frozenset((*PAGES, "style.css", "workspace.css", "workspace.js", "demo.js"))
 LEGAL_SHA256 = {
-    "privacy.html": "3a6b1d0086ba6c03fcd36f84796957a4df6d6e23d8bc2117097bf37ab9361f8c",
-    "terms.html": "a9125cfda526bce2f3576e0afa37832c3cb8df4edff31f6250359ffe63e6e55e",
+    "privacy.html": "dd93a5232cea6118621b48cd90ee6d76427feb64e7fb19504e96d520d9243b08",
+    "terms.html": "4de491b00b17348ac000090d7bef5d75f2986718d40c8c0e3b0f0ddee5c1731e",
 }
 TOKEN_SHA256 = "83b38625413718c6a802354139d2e8dc014c235369df22be97f9d0a50e457a13"
 PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
@@ -45,6 +47,8 @@ class SiteParser(HTMLParser):
         if tag == "link":
             self.links.append(attributes)
             self.references.append(attributes.get("href", ""))
+        elif tag == "script":
+            self.references.append(attributes.get("src", ""))
         elif tag == "img":
             self.images.append(attributes)
             self.references.append(attributes.get("src", ""))
@@ -98,7 +102,7 @@ def check_html(name: str, content: bytes, *, check_local_links: bool) -> None:
         legal_body = match.group(1).replace("\r\n", "\n").replace("\r", "\n").encode("utf-8")
         digest = hashlib.sha256(legal_body).hexdigest()
         if digest != LEGAL_SHA256[name]:
-            fail(f"{name}: legal body differs from the original baseline ({digest})")
+            fail(f"{name}: legal body differs from the reviewed current-functionality baseline ({digest})")
 
     if check_local_links:
         for value in parser.references:
@@ -140,9 +144,17 @@ def check_local() -> None:
 
     if not (ROOT / "style.css").is_file():
         fail("style.css: stylesheet is missing")
+    sample = (ROOT / "assets/technical-sample.mp4").read_bytes()
+    workspace = (ROOT / "workspace.js").read_text(encoding="utf-8")
+    if f"const SAMPLE_BYTES = {len(sample)};" not in workspace or hashlib.sha256(sample).hexdigest() not in workspace:
+        fail("technical sample size or fingerprint differs from the workspace pin")
+    home = (ROOT / "index.html").read_text(encoding="utf-8")
+    if "TikTok connection is unavailable" not in home or "connect-src 'none'" not in home:
+        fail("workspace must disclose missing connection and prohibit network API calls")
+    print("PASS local: sample fingerprint and network-disabled workspace disclosures")
     print("PASS local: PNG signature, 512x512 opaque RGB, and size under 1 MB")
     print("PASS local: all pages use the same icon, project-safe links, and exact canonical URLs")
-    print("PASS local: legal bodies and TikTok verification file match original baselines")
+    print("PASS local: legal bodies match reviewed current-functionality baselines; TikTok verification file matches original baseline")
 
 
 class RedirectLog(HTTPRedirectHandler):
@@ -175,7 +187,13 @@ def check_live() -> None:
         "index.html": (SITE_URL, "text/html"),
         "privacy.html": (urljoin(SITE_URL, "privacy.html"), "text/html"),
         "terms.html": (urljoin(SITE_URL, "terms.html"), "text/html"),
+        "review.html": (urljoin(SITE_URL, "review.html"), "text/html"),
+        "demo.html": (urljoin(SITE_URL, "demo.html"), "text/html"),
         "style.css": (urljoin(SITE_URL, "style.css"), "text/css"),
+        "workspace.css": (urljoin(SITE_URL, "workspace.css"), "text/css"),
+        "workspace.js": (urljoin(SITE_URL, "workspace.js"), "application/javascript"),
+        "demo.js": (urljoin(SITE_URL, "demo.js"), "application/javascript"),
+        "assets/technical-sample.mp4": (urljoin(SITE_URL, "assets/technical-sample.mp4"), "video/mp4"),
         ICON_FILE: (urljoin(SITE_URL, ICON_FILE), "image/png"),
         TOKEN_FILE: (urljoin(SITE_URL, TOKEN_FILE), "text/plain"),
     }
@@ -188,7 +206,7 @@ def check_live() -> None:
             continue
         if status != 200:
             errors.append(f"live {path}: HTTP status {status}")
-        if actual_type != content_type:
+        if actual_type != content_type and not (content_type == "application/javascript" and actual_type == "text/javascript"):
             errors.append(f"live {path}: content type {actual_type!r}, expected {content_type!r}")
         if final_url != url:
             errors.append(f"live {path}: resolved to {final_url!r}, expected {url!r}")

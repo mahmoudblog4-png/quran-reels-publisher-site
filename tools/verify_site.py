@@ -193,6 +193,7 @@ def check_live() -> None:
         "workspace.css": (urljoin(SITE_URL, "workspace.css"), "text/css"),
         "workspace.js": (urljoin(SITE_URL, "workspace.js"), "application/javascript"),
         "demo.js": (urljoin(SITE_URL, "demo.js"), "application/javascript"),
+        "assets/integration-rehearsal.mp4": (urljoin(SITE_URL, "assets/integration-rehearsal.mp4"), "video/mp4"),
         "assets/technical-sample.mp4": (urljoin(SITE_URL, "assets/technical-sample.mp4"), "video/mp4"),
         ICON_FILE: (urljoin(SITE_URL, ICON_FILE), "image/png"),
         TOKEN_FILE: (urljoin(SITE_URL, TOKEN_FILE), "text/plain"),

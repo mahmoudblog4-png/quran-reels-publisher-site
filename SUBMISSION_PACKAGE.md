@@ -6,8 +6,8 @@ Reviewed: 2026-10-18. No TikTok approval, portal configuration update or API suc
 ## Root causes independently found
 1. The previous public site was informational, with legal-page buttons rather than an application entry point. It described connected publishing without a working public interaction.
 2. The existing project's `n8n_workflows/quran-reels-tiktok-publisher.json` only returns pending/approval-required states, has no TikTok HTTP transfer, no authorization callback and no actual platform readback. The current app sources have no TikTok OAuth routes or client implementation.
-3. There is no verified sandbox transaction or complete real end-to-end integration recording. A description or a simulation cannot establish it.
-4. Additional eligibility gate: app-review guidance excludes private/personal applications and apps still in development/testing. Direct Post guidance excludes utilities limited to accounts the developer/team manages. Do not conceal the current audience or invent a public service.
+3. Authenticated portal inspection found that no Sandbox has been created. There is no verified sandbox transaction or complete real end-to-end integration recording. A description or a simulation cannot establish it.
+4. Confirmed audience: the owner explicitly stated personal use for their own accounts only on 2026-10-18. This is a material eligibility blocker. Additional eligibility gate: app-review guidance excludes private/personal applications and apps still in development/testing. Direct Post guidance excludes utilities limited to accounts the developer/team manages. Do not conceal the current audience or invent a public service.
 
 ## Website changes
 The existing domain now hosts a functional local preparation workspace: preview, dimensions/duration, caption/attribution, review declarations and a file-fingerprinted manifest download. Unsupported integration claims were corrected and the legal pages now state actual public data flows. The existing verification file and icon are preserved.
@@ -19,13 +19,15 @@ Website: https://mahmoudblog4-png.github.io/quran-reels-publisher-site/
 Privacy: https://mahmoudblog4-png.github.io/quran-reels-publisher-site/privacy.html
 Terms: https://mahmoudblog4-png.github.io/quran-reels-publisher-site/terms.html
 Reviewer instructions: https://mahmoudblog4-png.github.io/quran-reels-publisher-site/review.html
+Simulated still-frame video (not real API evidence): https://mahmoudblog4-png.github.io/quran-reels-publisher-site/assets/integration-rehearsal.mp4
 Clearly labeled simulated rehearsal: https://mahmoudblog4-png.github.io/quran-reels-publisher-site/demo.html
 Technical sample (not integration evidence): https://mahmoudblog4-png.github.io/quran-reels-publisher-site/assets/technical-sample.mp4
 
 ## Products and scope inventory
 - Implemented public TikTok products: NONE.
 - Scopes requested by deployed website: NONE.
-- Actual current portal products/scopes: UNVERIFIED (login required).
+- Actual rejected production configuration, verified while authenticated: NO PRODUCTS; scopes `user.info.profile`, `user.info.stats`, `video.list`. No Login Kit callback configuration is displayed. The Sandbox screen offers Create Sandbox; no sandbox exists.
+- Corrections prepared in the draft: remove all three unsupported scopes, correct the public description and replace the unsupported integration review claims. Save/readback status must be recorded separately.
 - Future minimum proposal: Login Kit authorization for a real Content Posting API inbox-upload integration using `video.upload`. Verify the exact supported sandbox configuration first. OAuth still requires a secure backend.
 - Remove `video.publish` if direct posting will not be implemented and demonstrated. No direct-post feature exists today.
 - Remove `video.list`, Display API and profile permissions if no required implemented feature uses them. Do not request `user.info.basic` merely to pad the demonstration; request it only if the final real account-profile feature needs and demonstrates it.
@@ -56,7 +58,7 @@ The sequence below must be RECORDED from the actual sandbox integration. The reh
 First approval requires Sandbox. Up to 5 demo files, each <=50 MB; show readable UI, actual user interactions and the same web domain as Website URL. Test credentials are unnecessary for the public local workspace. If a later real integration needs an application test account, provide access only via TikTok's private review fields; never disclose social login passwords, app secrets, OAuth tokens or production credentials.
 
 ## Remaining manual steps / authenticated portal workflow
-1. Sign in to https://developers.tiktok.com/apps/ and open ONLY the existing app named Quran Reels Publisher. Do not create a new app. Record its actual saved products, scopes, registered redirect URI and latest rejection details without recording keys or secrets.
+1. Authenticated inspection completed for existing app ID 7692826914146371590, Quran Reels Publisher. Latest rejection was October 14, 2026; Website URL and Scopes mismatch, including incomplete demonstration. No configured products; three unsupported scopes as listed above; no sandbox exists. Production Website/Privacy/Terms values match the published URLs. URL prefix ownership is Verified. Credentials stayed masked. No Login Kit callback configuration was displayed.
 2. Resolve actual intended audience and eligibility. A private owner-only utility must not be described as public. A change to a genuine public product is a separate product/hosting implementation, not a wording correction.
 3. Deploy the secure OAuth and inbox-upload service for the existing app. Preserve client identity/credentials. Use state validation, server-side code exchange, protected token storage, callback allowlisting, explicit per-file consent, bounded transfer, duplicate protection and status readback. GitHub Pages cannot host this backend. Do not expose the existing local production service or embed secrets in JavaScript.
 4. In the EXISTING app's Sandbox configuration, verify the registered callback and authorized test account. Confirm only the products/scopes implemented by the final flow are selected.
@@ -72,4 +74,4 @@ https://developers.tiktok.com/doc/content-sharing-guidelines
 https://developers.tiktok.com/doc/content-posting-api-get-started-upload-content
 
 ## Preservation boundary
-No YouTube Shorts or Long-Form pipeline, production database, media, OAuth credential, publishing schedule or automation was changed. No upload or public post was triggered. No new TikTok application was created. Portal login was unavailable at initial inspection; no portal write or resubmission is claimed.
+No YouTube Shorts or Long-Form pipeline, production database, media, OAuth credential, publishing schedule or automation was changed. No upload or public post was triggered. No new TikTok application was created. Portal access became available after the owner signed in. A correction draft is open, but saving initially failed because an app icon is required and the portal now requires 1024x1024. The unchanged existing 512x512 website icon was rejected by the uploader. No successful save, persistent scope removal or resubmission is claimed until verified readback. The previously attached rejected video was preserved, not treated as current integration evidence.

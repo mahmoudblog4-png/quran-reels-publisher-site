@@ -6,7 +6,7 @@ Existing site: https://mahmoudblog4-png.github.io/quran-reels-publisher-site/
 No-login local MP4/WebM preview, browser metadata inspection, editable caption and attribution, explicit human-review declarations and local JSON manifest export. A silent original technical test card is bundled. No Quran text, timings or recitation are generated or changed here. Selected user files remain local. No third-party scripts, analytics or application API calls are used.
 
 ## What does not work
-There is no TikTok OAuth backend, account connection, inbox upload, direct posting or platform readback. The local project's TikTok workflow is a pending-state stub, not a live publisher. Authenticated portal inspection found three unsupported scopes (user.info.profile, user.info.stats, video.list), no configured products and no existing sandbox. A zero-scope correction is being prepared; do not claim saved removal until readback succeeds.
+There is no TikTok OAuth backend, account connection, inbox upload, direct posting or platform readback. The local project's TikTok workflow is a pending-state stub, not a live publisher. Authenticated portal inspection found three unsupported scopes (user.info.profile, user.info.stats, video.list), no configured products and no existing sandbox. All three scopes were removed and the correction saved in the existing app on October 18, 2026; changelog confirms removal. The draft has zero products/scopes and is not submitted.
 
 Do not resubmit yet. Do not claim that these website changes meet every reviewer requirement. See `SUBMISSION_PACKAGE.md` and `review.html`. The clearly labeled `demo.html` rehearsal is simulated and is not the real sandbox video TikTok requires.
 
@@ -16,7 +16,8 @@ Do not resubmit yet. Do not claim that these website changes meet every reviewer
 - `demo.html`, `demo.js`: simulated integration rehearsal, with no credentials, API operations or fabricated success.
 - `assets/integration-rehearsal.mp4`: 64-second labeled still-frame walkthrough, not a real API or sandbox recording.
 - `privacy.html`, `terms.html`: legal pages with current-deployment limitations.
-- `assets/app-icon.png`: existing app branding, unchanged.
+- `assets/app-icon.png`: existing 512px website branding, unchanged.
+- `assets/app-icon-1024.png`: exact 2x pixel duplication of the same icon, uploaded to satisfy the portal's 1024px requirement with owner approval; no new drawing.
 - `assets/technical-sample.mp4`: original silent technical sample, not an integration recording.
 - Existing TikTok site verification text file: unchanged byte for byte.
 
